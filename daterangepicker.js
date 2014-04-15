@@ -103,6 +103,7 @@
             this.maxDate = false;
             this.dateLimit = false;
 
+            this.editable = false;
             this.showDropdowns = false;
             this.showWeekNumbers = false;
             this.timePicker = false;
@@ -119,7 +120,9 @@
             this.applyClass = 'btn-success';
             this.cancelClass = 'btn-default';
 
-            this.format = 'MM/DD/YYYY';
+            this.format = 'L';
+            this.renderFormat = 'L';
+            this.parseFormat = 'L';
             this.separator = ' - ';
 
             this.locale = {
@@ -136,8 +139,17 @@
 
             this.cb = function () { };
 
+            if (typeof options.onChange === 'function')
+                callback = options.onChange;
+
             if (typeof options.format === 'string')
                 this.format = options.format;
+
+            if (typeof options.renderFormat === 'string')
+                this.renderFormat = options.renderFormat;
+
+            if (typeof options.parseFormat === 'string')
+                this.parseFormat = options.parseFormat;
 
             if (typeof options.separator === 'string')
                 this.separator = options.separator;
@@ -222,8 +234,13 @@
                 }
             }
 
-            if (typeof options.opens === 'string')
+            if (typeof options.editable === 'boolean') {
+                this.editable = options.editable;
+            }
+
+            if (typeof options.opens === 'string') {
                 this.opens = options.opens;
+            }
 
             if (typeof options.showWeekNumbers === 'boolean') {
                 this.showWeekNumbers = options.showWeekNumbers;
@@ -259,24 +276,31 @@
 
             var start, end, range;
 
-            //if no start/end dates set, check if an input element contains initial values
+            // If no start/end dates set, check if an input element contains initial values
             if (typeof options.startDate === 'undefined' && typeof options.endDate === 'undefined') {
                 if ($(this.element).is('input[type=text]')) {
                     var val = $(this.element).val();
                     var split = val.split(this.separator);
                     start = end = null;
-                    if (split.length == 2) {
-                        start = moment(split[0], this.format);
-                        end = moment(split[1], this.format);
-                    } else if (this.singleDatePicker) {
-                        start = moment(val, this.format);
-                        end = moment(val, this.format);
+
+                    if (val && this.singleDatePicker) {
+                        start = moment(val, this.parseFormat).startOf('day');
+                        end = moment(val, this.parseFormat).endOf('day');
+                    } else if (val) {
+                        start = moment(split[0], this.parseFormat).startOf('day');
+                        end = moment(spit[1], this.parseFormat).endOf('day');
                     }
+
                     if (start !== null && end !== null) {
                         this.startDate = start;
                         this.endDate = end;
                     }
                 }
+            }
+
+            // If editable, remove the "disabled" property on the text fields.
+            if (this.editable) {
+                $(this.element).find('.input-mini').removeAttr('disabled').prop('disabled', false);
             }
 
             if (typeof options.ranges === 'object') {
@@ -457,7 +481,7 @@
                     left: this.parentEl.offset().left - this.parentEl.scrollLeft()
                 };
             }
-            
+
             if (this.opens == 'left') {
                 this.container.css({
                     top: this.element.offset().top + this.element.outerHeight() - parentOffset.top,
@@ -512,7 +536,7 @@
             if (
                 target.closest(this.element).length ||
                 target.closest(this.container).length ||
-                target.closest('.calendar-date').length 
+                target.closest('.calendar-date').length
                 ) return;
             this.hide();
         },
@@ -554,9 +578,9 @@
 
         updateInputText: function() {
             if (this.element.is('input') && !this.singleDatePicker) {
-                this.element.val(this.startDate.format(this.format) + this.separator + this.endDate.format(this.format));
+                this.element.val(this.startDate.format(this.renderFormat) + this.separator + this.endDate.format(this.renderFormat));
             } else if (this.element.is('input')) {
-                this.element.val(this.startDate.format(this.format));
+                this.element.val(this.startDate.format(this.renderFormat));
             }
         },
 

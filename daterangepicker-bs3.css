@@ -8,7 +8,38 @@
  * Built for http://www.improvely.com
  */
 
- .daterangepicker.dropdown-menu {
+.daterangepicker,
+.daterangepicker *,
+.daterangepicker:before,
+.daterangepicker:after {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.daterangepicker table th {
+  font-weight: bold !important;
+}
+
+.daterangepicker .glyphicon:before {
+  font-family: Modernpics;
+  font-size: 20px;
+  font-style: normal;
+  line-height: 20px;
+}
+
+.daterangepicker .icon-arrow-left:before {
+  content: '›';
+}
+
+.daterangepicker .icon-arrow-right:before {
+  content: '‹';
+}
+
+.daterangepicker .input-mini {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.daterangepicker.dropdown-menu {
   max-width: none;
   z-index: 3000;
 }
@@ -258,7 +289,7 @@
 }
 
 .daterangepicker_end_input {
-  float: left; 
+  float: left;
   padding-left: 11px
 }
 
