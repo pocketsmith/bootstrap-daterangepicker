@@ -83,7 +83,7 @@
             this.element.on({
                 'click.daterangepicker': $.proxy(this.show, this),
                 'focus.daterangepicker': $.proxy(this.show, this),
-                'keyup.daterangepicker': $.proxy(this.updateFromControl, this)
+                'change.daterangepicker': $.proxy(this.updateFromControl, this)
             });
         } else {
             this.element.on('click.daterangepicker', $.proxy(this.toggle, this));
