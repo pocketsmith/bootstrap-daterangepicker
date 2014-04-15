@@ -103,6 +103,7 @@
             this.maxDate = false;
             this.dateLimit = false;
 
+            this.readonly = false
             this.editable = false;
             this.showDropdowns = false;
             this.showWeekNumbers = false;
@@ -138,9 +139,6 @@
             };
 
             this.cb = function () { };
-
-            if (typeof options.onChange === 'function')
-                callback = options.onChange;
 
             if (typeof options.format === 'string')
                 this.format = options.format;
@@ -234,6 +232,10 @@
                 }
             }
 
+            if (typeof options.readonly === 'boolean') {
+                this.readonly = options.readonly;
+            }
+
             if (typeof options.editable === 'boolean') {
                 this.editable = options.editable;
             }
@@ -276,9 +278,16 @@
 
             var start, end, range;
 
+            // If only one of start/end date is set, apply it to both
+            if (typeof options.startDate === 'undefined' && typeof options.endDate !== 'undefined') {
+              options.startDate = options.endDate;
+            } else if (typeof options.startDate !== 'undefined' && typeof options.endDate === 'undefined') {
+              options.endDate = options.startDate;
+            }
+
             // If no start/end dates set, check if an input element contains initial values
             if (typeof options.startDate === 'undefined' && typeof options.endDate === 'undefined') {
-                if ($(this.element).is('input[type=text]')) {
+                if ($(this.element).is('input:text')) {
                     var val = $(this.element).val();
                     var split = val.split(this.separator);
                     start = end = null;
@@ -296,6 +305,11 @@
                         this.endDate = end;
                     }
                 }
+            }
+
+            // Flag the original input as readonly.
+            if (this.readonly) {
+                $(this.element).attr('readonly', true).prop('readonly', true);
             }
 
             // If editable, remove the "disabled" property on the text fields.
