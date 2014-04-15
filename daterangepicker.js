@@ -83,7 +83,7 @@
             this.element.on({
                 'click.daterangepicker': $.proxy(this.show, this),
                 'focus.daterangepicker': $.proxy(this.show, this),
-                'change.daterangepicker': $.proxy(this.updateFromControl, this)
+                'keyup.daterangepicker': $.proxy(this.updateFromControl, this)
             });
         } else {
             this.element.on('click.daterangepicker', $.proxy(this.toggle, this));
@@ -459,14 +459,17 @@
             if (!this.element.is('input')) return;
             if (!this.element.val().length) return;
 
+            var parseRenderFormat = this.renderFormat.replace('Do', 'DD');
+
             var dateString = this.element.val().split(this.separator);
-            var start = moment(dateString[0], this.format);
-            var end = moment(dateString[1], this.format);
+            var start = moment(dateString[0], parseRenderFormat);
+            var end = moment(dateString[1], parseRenderFormat);
 
             if (this.singleDatePicker) {
-                start = moment(this.element.val(), this.format);
-                end = start;
+                end = moment(start);
             }
+
+            if (!start.isValid() || !end.isValid()) return;
 
             if (end.isBefore(start)) return;
 
