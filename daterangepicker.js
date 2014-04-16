@@ -287,8 +287,8 @@
 
             // If no start/end dates set, check if an input element contains initial values
             if (typeof options.startDate === 'undefined' && typeof options.endDate === 'undefined') {
-                if ($(this.element).is('input:text')) {
-                    var val = $(this.element).val();
+                if (this.element.is('input:text')) {
+                    var val = this.element.val();
                     var split = val.split(this.separator);
                     start = end = null;
 
@@ -297,7 +297,7 @@
                         end = moment(val, this.parseFormat).endOf('day');
                     } else if (val) {
                         start = moment(split[0], this.parseFormat).startOf('day');
-                        end = moment(spit[1], this.parseFormat).endOf('day');
+                        end = moment(split[1], this.parseFormat).endOf('day');
                     }
 
                     if (start !== null && end !== null) {
