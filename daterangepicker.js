@@ -1,5 +1,5 @@
 /**
-* @version: 1.3.5
+* @version: 1.3.5.1
 * @author: Dan Grossman http://www.dangrossman.info/
 * @date: 2014-03-19
 * @copyright: Copyright (c) 2012-2014 Dan Grossman. All rights reserved.
@@ -48,7 +48,7 @@
         //apply CSS classes and labels to buttons
         var c = this.container;
         $.each(this.buttonClasses, function (idx, val) {
-            c.find('button').addClass(val);
+            c.find('.range_inputs button').addClass(val);
         });
         this.container.find('.daterangepicker_start_input label').html(this.locale.fromLabel);
         this.container.find('.daterangepicker_end_input label').html(this.locale.toLabel);
@@ -65,6 +65,8 @@
             .on('click.daterangepicker', '.prev', $.proxy(this.clickPrev, this))
             .on('click.daterangepicker', '.next', $.proxy(this.clickNext, this))
             .on('click.daterangepicker', 'td.available', $.proxy(this.clickDate, this))
+            .on('click.daterangepicker', '.drp-quicklink-today', $.proxy(this.clickToday, this))
+            .on('click.daterangepicker', '.drp-quicklink-clear', $.proxy(this.clickClear, this))
             .on('mouseenter.daterangepicker', 'td.available', $.proxy(this.enterDate, this))
             .on('mouseleave.daterangepicker', 'td.available', $.proxy(this.updateFormInputs, this))
             .on('change.daterangepicker', 'select.yearselect', $.proxy(this.updateMonthYear, this))
@@ -738,6 +740,22 @@
             this.element.trigger('cancel.daterangepicker', this);
         },
 
+        clickToday: function (e) {
+            this.startDate = moment();
+            this.endDate = moment();
+            this.leftCalendar.month.month(this.startDate.month()).year(this.startDate.year());
+            this.rightCalendar.month.month(this.endDate.month()).year(this.endDate.year());
+            this.updateCalendars();
+
+            if (this.singleDatePicker)
+                this.clickApply();
+        },
+
+        clickClear: function (e) {
+          this.element.val('');
+          this.clickCancel();
+        },
+
         updateMonthYear: function (e) {
             var isLeft = $(e.target).closest('.calendar').hasClass('left'),
                 leftOrRight = isLeft ? 'left' : 'right',
@@ -966,6 +984,14 @@
 
             html += '</tbody>';
             html += '</table>';
+
+            if (this.singleDatePicker) {
+              html += '<div class="drp-quicklinks">';
+              html += '<button type="button" class="drp-quicklink-today">Today</button>';
+              html += '<button type="button" class="drp-quicklink-clear">Clear</button>';
+              html += '</div>';
+            }
+
             html += '</div>';
 
             var i;
