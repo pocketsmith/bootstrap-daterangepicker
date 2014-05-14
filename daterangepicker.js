@@ -30,7 +30,7 @@
                       '<label for="daterangepicker_end"></label>' +
                       '<input class="input-mini" type="text" name="daterangepicker_end" value="" disabled="disabled" />' +
                     '</div>' +
-                    '<button class="applyBtn" disabled="disabled"></button>&nbsp;' +
+                    '<button class="applyBtn" disabled="disabled"></button>' +
                     '<button class="cancelBtn"></button>' +
                   '</div>' +
                 '</div>' +
@@ -77,9 +77,10 @@
             .on('click.daterangepicker', 'button.applyBtn', $.proxy(this.clickApply, this))
             .on('click.daterangepicker', 'button.cancelBtn', $.proxy(this.clickCancel, this))
             .on('click.daterangepicker', '.daterangepicker_start_input,.daterangepicker_end_input', $.proxy(this.showCalendars, this))
-            .on('click.daterangepicker', 'li', $.proxy(this.clickRange, this))
-            .on('mouseenter.daterangepicker', 'li', $.proxy(this.enterRange, this))
-            .on('mouseleave.daterangepicker', 'li', $.proxy(this.updateFormInputs, this));
+            .on('click.daterangepicker', 'li:not(.drp-quicklink-clear)', $.proxy(this.clickRange, this))
+            .on('click.daterangepicker', 'li.drp-quicklink-clear', $.proxy(this.clickClear, this))
+            .on('mouseenter.daterangepicker', 'li:not(.drp-quicklink-clear)', $.proxy(this.enterRange, this))
+            .on('mouseleave.daterangepicker', 'li:not(.drp-quicklink-clear)', $.proxy(this.updateFormInputs, this));
 
         if (this.element.is('input')) {
             this.element.on({
@@ -135,6 +136,7 @@
                 toLabel: 'To',
                 weekLabel: 'W',
                 customRangeLabel: 'Custom Range',
+                clearLabel: 'Clear',
                 daysOfWeek: moment()._lang._weekdaysMin.slice(),
                 monthNames: moment()._lang._monthsShort.slice(),
                 firstDay: 0
@@ -349,6 +351,7 @@
                     list += '<li>' + range + '</li>';
                 }
                 list += '<li>' + this.locale.customRangeLabel + '</li>';
+                list += '<li class="drp-quicklink-clear">' + this.locale.clearLabel + '</li>';
                 list += '</ul>';
                 this.container.find('.ranges ul').remove();
                 this.container.find('.ranges').prepend(list);
