@@ -908,6 +908,7 @@
         },
 
         renderCalendar: function (calendar, selected, minDate, maxDate) {
+            var today = moment().startOf('day');
 
             var html = '<div class="calendar-date">';
             html += '<table class="table-condensed">';
@@ -961,6 +962,7 @@
 
                 for (var col = 0; col < 7; col++) {
                     var cname = 'available ';
+                    if (today.year() === calendar[row][col].year() && today.month() === calendar[row][col].month() && today.date() === calendar[row][col].date()) cname += ' today '
                     cname += (calendar[row][col].month() == calendar[1][1].month()) ? '' : 'off';
 
                     if ((minDate && calendar[row][col].isBefore(minDate)) || (maxDate && calendar[row][col].isAfter(maxDate))) {

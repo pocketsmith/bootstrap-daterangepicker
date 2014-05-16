@@ -240,6 +240,27 @@
   color: #999;
 }
 
+.daterangepicker td.today {
+  background-color: #ddeeff;
+  position: relative;
+}
+
+.daterangepicker td.today::after {
+  position: absolute;
+  top: 0; right: 0;
+  content: '';
+  width: 0;
+  border-top: 4px solid #99bbff;
+  border-left: 4px solid transparent;
+  border-radius: 0 4px 0 0;
+}
+
+.daterangepicker td.today.active::after,
+.daterangepicker td.today:hover::after,
+.daterangepicker td.in-range::after {
+  display: none;
+}
+
 .daterangepicker td.available:hover, .daterangepicker th.available:hover {
   background: #eee;
 }
