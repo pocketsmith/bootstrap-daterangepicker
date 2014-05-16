@@ -1,7 +1,7 @@
 /**
-* @version: 1.3.5.1
+* @version: 1.3.6.1
 * @author: Dan Grossman http://www.dangrossman.info/
-* @date: 2014-03-19
+* @date: 2014-04-29
 * @copyright: Copyright (c) 2012-2014 Dan Grossman. All rights reserved.
 * @license: Licensed under Apache License v2.0. See http://www.apache.org/licenses/LICENSE-2.0
 * @website: http://www.improvely.com/
@@ -40,7 +40,7 @@
         if (typeof options !== 'object' || options === null)
             options = {};
 
-        this.parentEl = (typeof options === 'object' && options.parentEl && $(options.parentEl).length) || $(this.parentEl);
+        this.parentEl = (typeof options === 'object' && options.parentEl && $(options.parentEl).length) ? $(options.parentEl) : $(this.parentEl);
         this.container = $(DRPTemplate).appendTo(this.parentEl);
 
         this.setOptions(options, cb);
@@ -466,15 +466,19 @@
 
             var parseRenderFormat = this.renderFormat.replace('Do', 'DD');
 
-            var dateString = this.element.val().split(this.separator);
-            var start = moment(dateString[0], parseRenderFormat);
-            var end = moment(dateString[1], parseRenderFormat);
+            var dateString = this.element.val().split(this.separator),
+                start = null,
+                end = null;
 
-            if (this.singleDatePicker) {
-                end = moment(start);
+            if(dateString.length === 2) {
+                start = moment(dateString[0], this.parseRenderFormat);
+                end = moment(dateString[1], this.parseRenderFormat);
             }
 
-            if (!start.isValid() || !end.isValid()) return;
+            if (this.singleDatePicker || start === null || end === null) {
+                start = moment(this.element.val(), this.parseRenderFormat);
+                end = start;
+            }
 
             if (end.isBefore(start)) return;
 
@@ -564,6 +568,8 @@
         },
 
         hide: function (e) {
+            $(document).off('click.daterangepicker', this.outsideClick);
+
             this.element.removeClass('active');
             this.container.hide();
 
@@ -573,7 +579,6 @@
             this.oldStartDate = this.startDate.clone();
             this.oldEndDate = this.endDate.clone();
 
-            $(document).off('click.daterangepicker', this.outsideClick);
             this.element.trigger('hide.daterangepicker', this);
         },
 
@@ -721,7 +726,8 @@
             this.rightCalendar.month.month(this.endDate.month()).year(this.endDate.year());
             this.updateCalendars();
 
-            endDate.endOf('day');
+            if (!this.timePicker)
+                endDate.endOf('day');
 
             if (this.singleDatePicker)
                 this.clickApply();
