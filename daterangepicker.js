@@ -471,12 +471,12 @@
                 end = null;
 
             if(dateString.length === 2) {
-                start = moment(dateString[0], this.parseRenderFormat);
-                end = moment(dateString[1], this.parseRenderFormat);
+                start = moment(dateString[0], parseRenderFormat);
+                end = moment(dateString[1], parseRenderFormat);
             }
 
             if (this.singleDatePicker || start === null || end === null) {
-                start = moment(this.element.val(), this.parseRenderFormat);
+                start = moment(this.element.val(), parseRenderFormat);
                 end = start;
             }
 
