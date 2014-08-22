@@ -718,7 +718,7 @@
                 $(e.target).addClass('active');
                 var difference = this.endDate.diff(this.startDate);
                 this.startDate = startDate;
-                this.endDate = moment(startDate).add('ms', difference);
+                this.endDate = moment(startDate).add(difference, 'ms');
                 this.chosenLabel = this.locale.customRangeLabel;
             }
 
@@ -845,8 +845,8 @@
 
         buildCalendar: function (month, year, hour, minute, side) {
             var firstDay = moment([year, month, 1]);
-            var lastMonth = moment(firstDay).subtract('month', 1).month();
-            var lastYear = moment(firstDay).subtract('month', 1).year();
+            var lastMonth = moment(firstDay).subtract(1, 'month').month();
+            var lastYear = moment(firstDay).subtract(1, 'month').year();
 
             var daysInLastMonth = moment([lastYear, lastMonth]).daysInMonth();
 
@@ -870,7 +870,7 @@
 
             var curDate = moment([lastYear, lastMonth, startDay, 12, minute]);
             var col, row;
-            for (i = 0, col = 0, row = 0; i < 42; i++, col++, curDate = moment(curDate).add('hour', 24)) {
+            for (i = 0, col = 0, row = 0; i < 42; i++, col++, curDate = moment(curDate).add(24, 'hours')) {
                 if (i > 0 && col % 7 === 0) {
                     col = 0;
                     row++;
