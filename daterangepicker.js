@@ -137,8 +137,8 @@
                 weekLabel: 'W',
                 customRangeLabel: 'Custom Range',
                 clearLabel: 'Clear',
-                daysOfWeek: moment.langData()._weekdaysMin.slice(),
-                monthNames: moment.langData()._monthsShort.slice(),
+                daysOfWeek: moment.localeData()._weekdaysMin.slice(),
+                monthNames: moment.localeData()._monthsShort.slice(),
                 firstDay: 0
             };
 
