@@ -605,9 +605,9 @@
 
         updateInputText: function() {
             if (this.element.is('input') && !this.singleDatePicker) {
-                this.element.val(this.startDate.format(this.renderFormat) + this.separator + this.endDate.format(this.renderFormat));
+                this.element.val(this.startDate.format(this.renderFormat) + this.separator + this.endDate.format(this.renderFormat)).change();
             } else if (this.element.is('input')) {
-                this.element.val(this.startDate.format(this.renderFormat));
+                this.element.val(this.startDate.format(this.renderFormat)).change();
             }
         },
 
@@ -761,7 +761,7 @@
         },
 
         clickClear: function (e) {
-          this.element.val('');
+          this.element.val('').change();
           this.clickCancel();
         },
 
