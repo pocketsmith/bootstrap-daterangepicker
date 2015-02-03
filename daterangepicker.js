@@ -114,6 +114,7 @@
             this.timePickerIncrement = 30;
             this.timePicker12Hour = true;
             this.singleDatePicker = false;
+            this.allowClear = true;
             this.ranges = {};
 
             this.opens = 'right';
@@ -268,6 +269,10 @@
                 this.singleDatePicker = options.singleDatePicker;
             }
 
+            if (typeof options.allowClear === 'boolean') {
+                this.allowClear = options.allowClear;
+            }
+
             if (typeof options.timePicker === 'boolean') {
                 this.timePicker = options.timePicker;
             }
@@ -351,7 +356,9 @@
                     list += '<li>' + range + '</li>';
                 }
                 list += '<li>' + this.locale.customRangeLabel + '</li>';
-                list += '<li class="drp-quicklink-clear">' + this.locale.clearLabel + '</li>';
+                if (this.allowClear) {
+                  list += '<li class="drp-quicklink-clear">' + this.locale.clearLabel + '</li>';
+                }
                 list += '</ul>';
                 this.container.find('.ranges ul').remove();
                 this.container.find('.ranges').prepend(list);
@@ -999,7 +1006,9 @@
             if (this.singleDatePicker) {
               html += '<div class="drp-quicklinks">';
               html += '<button type="button" class="drp-quicklink-today">Today</button>';
-              html += '<button type="button" class="drp-quicklink-clear">Clear</button>';
+              if (this.allowClear) {
+                html += '<button type="button" class="drp-quicklink-clear">' + this.locale.clearLabel + '</button>';
+              }
               html += '</div>';
             }
 
