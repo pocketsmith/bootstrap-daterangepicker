@@ -64,6 +64,8 @@
         this.container.find('.calendar')
             .on('click.daterangepicker', '.prev', $.proxy(this.clickPrev, this))
             .on('click.daterangepicker', '.next', $.proxy(this.clickNext, this))
+            .on('click.daterangepicker', '.prev-yr', $.proxy(this.clickPrevYr, this))
+            .on('click.daterangepicker', '.next-yr', $.proxy(this.clickNextYr, this))
             .on('click.daterangepicker', 'td.available', $.proxy(this.clickDate, this))
             .on('click.daterangepicker', '.drp-quicklink-today', $.proxy(this.clickToday, this))
             .on('click.daterangepicker', '.drp-quicklink-clear', $.proxy(this.clickClear, this))
@@ -666,6 +668,26 @@
             this.updateCalendars();
         },
 
+        clickPrevYr: function (e) {
+            var cal = $(e.target).parents('.calendar');
+            if (cal.hasClass('left')) {
+                this.leftCalendar.month.subtract('year', 1);
+            } else {
+                this.rightCalendar.month.subtract('year', 1);
+            }
+            this.updateCalendars();
+        },
+
+        clickNextYr: function (e) {
+            var cal = $(e.target).parents('.calendar');
+            if (cal.hasClass('left')) {
+                this.leftCalendar.month.add('year', 1);
+            } else {
+                this.rightCalendar.month.add('year', 1);
+            }
+            this.updateCalendars();
+        },
+
         enterDate: function (e) {
 
             var title = $(e.target).attr('data-title');
@@ -932,6 +954,12 @@
             if (this.showWeekNumbers)
                 html += '<th></th>';
 
+            if (!minDate || minDate.isBefore(calendar[1][1].clone().subtract('years', 1))) {
+                html += '<th class="prev-yr available"><i class="fa fa-arrow-left icon-doublearrow-left glyphicon glyphicon-arrow-left"></i></th>';
+            } else {
+                html += '<th></th>';
+            }
+
             if (!minDate || minDate.isBefore(calendar[1][1])) {
                 html += '<th class="prev available"><i class="fa fa-arrow-left icon-arrow-left glyphicon glyphicon-arrow-left"></i></th>';
             } else {
@@ -944,9 +972,16 @@
                 dateHtml = this.renderDropdowns(calendar[1][1], minDate, maxDate);
             }
 
-            html += '<th colspan="5" class="month">' + dateHtml + '</th>';
+            html += '<th colspan="3" class="month">' + dateHtml + '</th>';
+
             if (!maxDate || maxDate.isAfter(calendar[1][1])) {
                 html += '<th class="next available"><i class="fa fa-arrow-right icon-arrow-right glyphicon glyphicon-arrow-right"></i></th>';
+            } else {
+                html += '<th></th>';
+            }
+
+            if (!maxDate || maxDate.isAfter(calendar[1][1].clone().add('years', 1))) {
+                html += '<th class="next-yr available"><i class="fa fa-arrow-right icon-doublearrow-right glyphicon glyphicon-arrow-right"></i></th>';
             } else {
                 html += '<th></th>';
             }

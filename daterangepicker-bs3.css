@@ -28,11 +28,19 @@
 }
 
 .daterangepicker .icon-arrow-left:before {
-  content: '›';
+  content: '<';
 }
 
 .daterangepicker .icon-arrow-right:before {
-  content: '‹';
+  content: '>';
+}
+
+.daterangepicker .icon-doublearrow-left:before {
+  content: 'Ã';
+}
+
+.daterangepicker .icon-doublearrow-right:before {
+  content: 'À';
 }
 
 .daterangepicker .input-mini {
