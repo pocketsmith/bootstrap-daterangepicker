@@ -301,14 +301,15 @@
                 if (this.element.is('input:text')) {
                     var val = this.element.val();
                     var split = val.split(this.separator);
+                    var parseRenderFormat = this.renderFormat.replace('Do', 'DD');
                     start = end = null;
 
                     if (val && this.singleDatePicker) {
-                        start = moment(val, this.parseFormat).startOf('day');
-                        end = moment(val, this.parseFormat).endOf('day');
+                        start = moment(val, [this.parseFormat, parseRenderFormat]).startOf('day');
+                        end = moment(val, [this.parseFormat, parseRenderFormat]).endOf('day');
                     } else if (val) {
-                        start = moment(split[0], this.parseFormat).startOf('day');
-                        end = moment(split[1], this.parseFormat).endOf('day');
+                        start = moment(split[0], [this.parseFormat, parseRenderFormat]).startOf('day');
+                        end = moment(split[1], [this.parseFormat, parseRenderFormat]).endOf('day');
                     }
 
                     if (start !== null && end !== null) {
